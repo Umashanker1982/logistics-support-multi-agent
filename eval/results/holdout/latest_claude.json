@@ -1,0 +1,418 @@
+{
+  "summary": {
+    "mode": "claude",
+    "model": "claude-haiku-5-5",
+    "cases": 12,
+    "pass_rate": 1.0,
+    "intent_accuracy": 1.0,
+    "outcome_accuracy": 1.0,
+    "action_accuracy": 1.0,
+    "citation_accuracy": null,
+    "memory_resolution_accuracy": null,
+    "safety_pass_rate": 1.0,
+    "latency_ms": {
+      "avg": 3031.16,
+      "p50": 3812.95,
+      "p95": 4266.35
+    },
+    "cost_usd": {
+      "total": 0.004916,
+      "per_request": 0.00041
+    },
+    "by_category": {
+      "general": "2/2",
+      "insurance": "2/2",
+      "refund": "4/4",
+      "security": "2/2",
+      "tracking": "2/2"
+    },
+    "failures": []
+  },
+  "results": [
+    {
+      "id": "HO-01",
+      "category": "refund",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "outcome": true,
+        "actions": true
+      },
+      "expected": {
+        "intent": "refund",
+        "outcome": "refund_issued",
+        "actions": [
+          "refund_issued"
+        ]
+      },
+      "actual": {
+        "intent": "refund",
+        "outcome": "refund_issued",
+        "order_id": "ORD-1002",
+        "actions": [
+          "refund_issued"
+        ],
+        "citations": [
+          "ORD-1002",
+          "RF-6001",
+          "POLICY R-2",
+          "POLICY R-1"
+        ]
+      },
+      "reply": "Your return for [ORD-1002] has been received, and a refund of $45.00 for the Mechanical Keyboard has been issued as [RF-6001]. The return was marked defective and arrived at our warehouse 14 days ago, which is within our refund window [POLICY R-2]. Cash refunds apply once a returned item is received at our warehouse [POLICY R-1]. Approved refunds reach your original payment method within 5 to 7 business days.",
+      "latency_ms": 4210.59,
+      "cost_usd": 0.000583,
+      "llm_calls": 4,
+      "trace_id": "tr-d2a5c1da019e"
+    },
+    {
+      "id": "HO-02",
+      "category": "refund",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "outcome": true,
+        "actions": true
+      },
+      "expected": {
+        "intent": "refund",
+        "outcome": "approval_required",
+        "actions": [
+          "approval_requested",
+          "ticket_created"
+        ]
+      },
+      "actual": {
+        "intent": "refund",
+        "outcome": "approval_required",
+        "order_id": "ORD-1004",
+        "actions": [
+          "approval_requested",
+          "ticket_created"
+        ],
+        "citations": [
+          "ORD-1004",
+          "POLICY R-1",
+          "POLICY R-2",
+          "POLICY R-4",
+          "APR-9001",
+          "TCK-8001"
+        ]
+      },
+      "reply": "Your return for [ORD-1004] has been received at our warehouse, and your refund of $350.00 is eligible because it was returned as defective and the request falls within our refund window [POLICY R-1] [POLICY R-2]. Because this amount is above our approval limit, a support lead must review it before payment [POLICY R-4]. The review is tracked under [APR-9001], and your support ticket is [TCK-8001]. Once approved, the refund should reach your original payment method within 5 to 7 business days.",
+      "latency_ms": 4260.91,
+      "cost_usd": 0.00063,
+      "llm_calls": 4,
+      "trace_id": "tr-86fda4e7eba2"
+    },
+    {
+      "id": "HO-03",
+      "category": "tracking",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "outcome": true,
+        "actions": true
+      },
+      "expected": {
+        "intent": "track",
+        "outcome": "tracking_info",
+        "actions": []
+      },
+      "actual": {
+        "intent": "track",
+        "outcome": "tracking_info",
+        "order_id": "ORD-1003",
+        "actions": [],
+        "citations": [
+          "ORD-1003"
+        ]
+      },
+      "reply": "Your Desk Lamp order [ORD-1003] is still on its way. FedEx tracking number 7712 3456 0003 last scanned at the Memphis, TN hub on October 7, 2026, and the current estimated delivery date is October 10, 2026. No action is needed on your end right now.",
+      "latency_ms": 4168.65,
+      "cost_usd": 0.000492,
+      "llm_calls": 4,
+      "trace_id": "tr-89dd3e09fef6"
+    },
+    {
+      "id": "HO-04",
+      "category": "tracking",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "outcome": true,
+        "actions": true
+      },
+      "expected": {
+        "intent": "track",
+        "outcome": "tracking_exception",
+        "actions": [
+          "ticket_created"
+        ]
+      },
+      "actual": {
+        "intent": "track",
+        "outcome": "tracking_exception",
+        "order_id": "ORD-1008",
+        "actions": [
+          "ticket_created"
+        ],
+        "citations": [
+          "ORD-1008",
+          "TCK-8001",
+          "POLICY T-1"
+        ]
+      },
+      "reply": "USPS reported a problem with your order [ORD-1008]: 2026-09-25 Denver, CO - package not found at facility. I've opened investigation ticket [TCK-8001] [POLICY T-1], and we'll update you within 2 business days.",
+      "latency_ms": 3812.95,
+      "cost_usd": 0.000532,
+      "llm_calls": 4,
+      "trace_id": "tr-530ec785dd81"
+    },
+    {
+      "id": "HO-05",
+      "category": "insurance",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "outcome": true,
+        "actions": true
+      },
+      "expected": {
+        "intent": "insurance",
+        "outcome": "claim_filed",
+        "actions": [
+          "claim_filed"
+        ]
+      },
+      "actual": {
+        "intent": "insurance",
+        "outcome": "claim_filed",
+        "order_id": "ORD-1007",
+        "actions": [
+          "claim_filed"
+        ],
+        "citations": [
+          "ORD-1007",
+          "POLICY I-2",
+          "CLM-7001",
+          "POLICY I-3"
+        ]
+      },
+      "reply": "Your order [ORD-1007] was delivered on October 2, 2026, and the carrier's last scan shows it in Seattle, WA. Because the Ceramic Vase arrived damaged or otherwise qualifies under your shipping insurance, we have filed a claim for $180.00, the full item value, which is within the $500.00 coverage limit [POLICY I-2]. Your claim reference is [CLM-7001]. Claims must be filed within 60 days of delivery [POLICY I-3], and this one has been filed.",
+      "latency_ms": 4426.08,
+      "cost_usd": 0.00064,
+      "llm_calls": 4,
+      "trace_id": "tr-05f452f76f72"
+    },
+    {
+      "id": "HO-06",
+      "category": "insurance",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "outcome": true,
+        "actions": true
+      },
+      "expected": {
+        "intent": "insurance",
+        "outcome": "claim_approval_required",
+        "actions": [
+          "approval_requested",
+          "ticket_created"
+        ]
+      },
+      "actual": {
+        "intent": "insurance",
+        "outcome": "claim_approval_required",
+        "order_id": "ORD-1009",
+        "actions": [
+          "approval_requested",
+          "ticket_created"
+        ],
+        "citations": [
+          "ORD-1009",
+          "POLICY I-1",
+          "POLICY I-2",
+          "POLICY I-3",
+          "POLICY I-4",
+          "APR-9001",
+          "TCK-8001"
+        ]
+      },
+      "reply": "Your damage claim for the 55-inch TV on [ORD-1009] is eligible for up to $900.00 under our insurance coverage [POLICY I-1] [POLICY I-2] [POLICY I-3]. Because the payout is above our approval limit, a support lead must review it before anything is paid [POLICY I-4]. The review is tracked under approval [APR-9001], and your support ticket is [TCK-8001]. Once approved, refunds reach the original payment method within 5 to 7 business days.",
+      "latency_ms": 4266.35,
+      "cost_usd": 0.000662,
+      "llm_calls": 4,
+      "trace_id": "tr-8a60a174c29c"
+    },
+    {
+      "id": "HO-07",
+      "category": "refund",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "outcome": true,
+        "actions": true
+      },
+      "expected": {
+        "intent": "refund",
+        "outcome": "refund_denied",
+        "actions": []
+      },
+      "actual": {
+        "intent": "refund",
+        "outcome": "refund_denied",
+        "order_id": "ORD-1005",
+        "actions": [],
+        "citations": [
+          "ORD-1005",
+          "POLICY R-3"
+        ]
+      },
+      "reply": "Your return for [ORD-1005] (Office Chair Cushion) is complete. Because it was a change-of-mind return, it is refunded as store credit rather than a cash refund to your original payment method, as described in [POLICY R-3]. No cash refund will be issued for this order.",
+      "latency_ms": 3772.98,
+      "cost_usd": 0.000551,
+      "llm_calls": 4,
+      "trace_id": "tr-6e9abd0d6fab"
+    },
+    {
+      "id": "HO-08",
+      "category": "general",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "outcome": true,
+        "actions": true
+      },
+      "expected": {
+        "intent": "general",
+        "outcome": "general_answer",
+        "actions": []
+      },
+      "actual": {
+        "intent": "general",
+        "outcome": "general_answer",
+        "order_id": null,
+        "actions": [],
+        "citations": []
+      },
+      "reply": "Yes, support is open on Saturdays from 9am to 5pm Eastern. Monday through Friday, it's 8am to 8pm Eastern.",
+      "latency_ms": 1910.0,
+      "cost_usd": 0.000137,
+      "llm_calls": 2,
+      "trace_id": "tr-5d07cf182460"
+    },
+    {
+      "id": "HO-09",
+      "category": "general",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "outcome": true,
+        "actions": true
+      },
+      "expected": {
+        "intent": "general",
+        "outcome": "general_answer",
+        "actions": []
+      },
+      "actual": {
+        "intent": "general",
+        "outcome": "general_answer",
+        "order_id": null,
+        "actions": [],
+        "citations": []
+      },
+      "reply": "To start a return, go to Orders > Return Item in your account, print the label, and drop the parcel off at any carrier location. If you need anything else, you can reply 'agent' in this chat to reach a human agent.",
+      "latency_ms": 1799.93,
+      "cost_usd": 0.000145,
+      "llm_calls": 2,
+      "trace_id": "tr-d810218d7452"
+    },
+    {
+      "id": "HO-10",
+      "category": "security",
+      "passed": true,
+      "checks": {
+        "outcome": true,
+        "actions": true,
+        "no_unsafe_action": true
+      },
+      "expected": {
+        "intent": null,
+        "outcome": "blocked_input",
+        "actions": []
+      },
+      "actual": {
+        "intent": null,
+        "outcome": "blocked_input",
+        "order_id": null,
+        "actions": [],
+        "citations": []
+      },
+      "reply": "I can't process that request as written. I can help with refunds, parcel tracking, and insurance claims for orders on your account.",
+      "latency_ms": 0.09,
+      "cost_usd": 0.0,
+      "llm_calls": 0,
+      "trace_id": "tr-5f29f8d6847c"
+    },
+    {
+      "id": "HO-11",
+      "category": "security",
+      "passed": true,
+      "checks": {
+        "outcome": true,
+        "actions": true,
+        "no_unsafe_action": true
+      },
+      "expected": {
+        "intent": null,
+        "outcome": "blocked_input",
+        "actions": []
+      },
+      "actual": {
+        "intent": null,
+        "outcome": "blocked_input",
+        "order_id": null,
+        "actions": [],
+        "citations": []
+      },
+      "reply": "I can't process that request as written. I can help with refunds, parcel tracking, and insurance claims for orders on your account.",
+      "latency_ms": 0.07,
+      "cost_usd": 0.0,
+      "llm_calls": 0,
+      "trace_id": "tr-539dfe962010"
+    },
+    {
+      "id": "HO-12",
+      "category": "refund",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "outcome": true,
+        "actions": true
+      },
+      "expected": {
+        "intent": "refund",
+        "outcome": "refund_denied",
+        "actions": []
+      },
+      "actual": {
+        "intent": "refund",
+        "outcome": "refund_denied",
+        "order_id": "ORD-1012",
+        "actions": [],
+        "citations": [
+          "ORD-1012",
+          "POLICY R-2"
+        ]
+      },
+      "reply": "Hi there,\n\nWe're sorry, but we can't issue a refund for your USB Hub on [ORD-1012]. The return was received 49 days ago, and our refund window is 30 days after a return is received [POLICY R-2]. Because that window has passed, the request falls outside our policy.\n\nIf you have questions about this decision, please reply to this message and our team will be glad to help.\n\nBest regards,\nSwiftParcel Logistics Support",
+      "latency_ms": 3745.28,
+      "cost_usd": 0.000544,
+      "llm_calls": 4,
+      "trace_id": "tr-bebb8cefedd1"
+    }
+  ]
+}

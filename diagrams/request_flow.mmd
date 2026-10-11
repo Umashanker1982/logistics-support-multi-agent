@@ -1,0 +1,34 @@
+sequenceDiagram
+    autonumber
+    actor C as Customer (C-200)
+    participant O as Orchestrator
+    participant G as Guardrails
+    participant I as Intent agent
+    participant R as Router
+    participant L as Lookup agent
+    participant P as Policy agent
+    participant E as Execution agent
+    participant A as Approval queue
+    participant W as Response agent
+    actor H as Support lead
+    C->>O: "Refund ORD-1004, the monitor was defective"
+    O->>G: validate_input
+    G-->>O: allowed
+    O->>I: classify + extract
+    I-->>O: refund, ORD-1004, defective
+    O->>R: route(refund)
+    R-->>O: refund_workflow
+    O->>L: verify_access + gather facts
+    L-->>O: order, return received, no refund yet
+    O->>P: check_refund_eligibility
+    P-->>O: eligible, $350, requires_approval (R-4)
+    O->>E: execute decision
+    E->>A: request approval + high-priority ticket
+    E-->>O: approval_required (APR-9001)
+    O->>W: draft reply from fact sheet
+    W->>G: validate_output
+    W-->>O: reply with [ORD-1004] [POLICY R-4] [APR-9001]
+    O-->>C: "A support lead must review it first..."
+    H->>A: approve APR-9001
+    A->>E: execute_approved
+    E-->>H: refund_issued RF-6002

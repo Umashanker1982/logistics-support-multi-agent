@@ -1,0 +1,28 @@
+# Render Blueprint: one-click deploy of the web demo from this repository.
+# Render dashboard -> New -> Blueprint -> pick this repo. Set ANTHROPIC_API_KEY when prompted.
+services:
+  - type: web
+    name: swiftparcel-agents
+    runtime: docker
+    plan: free                 # switch to "starter" ($7/mo) for an always-on demo day
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false            # secret: entered in the dashboard, never stored in git
+      - key: CLAUDE_MODEL
+        value: claude-haiku-5-5
+      - key: LLM_TIMEOUT_S           # keep the live demo snappy; on failure it falls back to rules
+        value: "12"
+      - key: LLM_MAX_RETRIES
+        value: "1"
+      - key: DEMO_AUTHOR
+        value: Umashanker
+      - key: DEMO_DAILY_CLAUDE_REQUESTS
+        value: "300"
+      - key: DEMO_HOME_URL      # set later to the landing page, e.g. https://umashanker.com
+        value: ""
+      - key: MAINTENANCE_MODE       # set to 1 to show the "Back shortly" page to all visitors
+        value: "0"
+      - key: DEMO_MSGS_PER_10MIN
+        value: "30"

@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#13233F">
+<title>SwiftParcel Agents: Capstone 1 by Umashanker</title>
+<meta name="description" content="A live demo of a production multi-agent customer support system for a logistics company. Capstone 1 by Umashanker.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/styles.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%2313233F'/%3E%3Crect x='7' y='9' width='18' height='14' rx='1.5' fill='%23F5C518'/%3E%3Cpath d='M7 14h18' stroke='%2313233F' stroke-width='2'/%3E%3C/svg%3E">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <div class="brand">
+    <svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true"><rect x="4" y="9" width="32" height="24" rx="2" fill="#F5C518"/><path d="M4 17h32" stroke="#13233F" stroke-width="2.5"/><path d="M17 9v8M23 9v8" stroke="#13233F" stroke-width="2.5"/><rect x="9" y="23" width="12" height="2.5" fill="#13233F"/><rect x="9" y="27" width="8" height="2" fill="#13233F"/></svg>
+    <div>
+      <p class="brand-name">SwiftParcel support agents</p>
+      <p class="brand-sub">Capstone 1: Production Multi-Agent System</p>
+    </div>
+  </div>
+  <div class="byline">
+    <a class="home-link" id="home-link" href="#" hidden>All projects</a>
+    <span class="tape">Built by <strong id="author">Umashanker</strong></span>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="Sections">
+  <button class="tab is-active" data-tab="demo" aria-current="page">Live demo</button>
+  <button class="tab" data-tab="approvals">Support lead <span class="badge" id="approvals-badge" hidden>0</span></button>
+  <button class="tab" data-tab="how">How it works</button>
+  <button class="tab" data-tab="results">Test results</button>
+  <div class="tab-tools">
+    <div class="mode" role="radiogroup" aria-label="Language model">
+      <button class="mode-btn is-active" data-mode="offline" role="radio" aria-checked="true" title="Deterministic rules. Free and instant.">Rules only</button>
+      <button class="mode-btn" data-mode="claude" role="radio" aria-checked="false" title="Claude Haiku understands the message, chooses lookups, and writes the reply.">Claude AI</button>
+    </div>
+    <button class="ghost" id="reset">Reset demo</button>
+  </div>
+</nav>
+
+<main id="main">
+
+<!-- ============================== LIVE DEMO ============================== -->
+<section class="view is-active" id="view-demo" aria-labelledby="hero-title">
+  <div class="hero">
+    <div class="hero-text">
+      <h1 id="hero-title">A parcel company's support desk, run by a team of AI agents</h1>
+      <p>Customers of SwiftParcel, a fictional delivery company, ask about refunds, missing parcels and insurance for broken items.
+        Each message is passed between specialist agents. One understands it, one looks up the order, one checks the company rules,
+        one takes action, and one writes the reply. Money only moves when the rules allow it, and anything over the approval limit waits for a person.</p>
+      <p class="hero-hint">Pick a step from the guided tour, or choose a customer and type your own question. The tracking timeline shows every step the agents take, live, as it happens.</p>
+    </div>
+    <dl class="hero-facts">
+      <div><dt>Specialist agents</dt><dd>6</dd></div>
+      <div><dt>Benchmark cases</dt><dd>46</dd></div>
+      <div><dt>Unsafe actions in tests</dt><dd>0</dd></div>
+    </dl>
+  </div>
+
+  <div class="workbench">
+    <!-- Left: tour, customers, rules -->
+    <aside class="rail">
+      <section class="panel" aria-labelledby="tour-title">
+        <h2 id="tour-title">Guided tour</h2>
+        <p class="panel-intro">Nine short scenarios. Each one shows a different part of the system.</p>
+        <ol class="tour" id="tour"></ol>
+      </section>
+
+      <section class="panel" aria-labelledby="rules-title">
+        <h2 id="rules-title">Business rules</h2>
+        <p class="panel-intro">Change the rules and apply them instantly. No restart, no redeploy: the agents pick them up on the next message.</p>
+        <label class="field">
+          <span>Refunds and claims above this need a person</span>
+          <span class="range-row"><input type="range" id="limit" min="50" max="1000" step="50" value="200"><output id="limit-out">$200</output></span>
+        </label>
+        <label class="field">
+          <span>Days after a return to request a refund</span>
+          <span class="range-row"><input type="range" id="window" min="7" max="90" step="1" value="30"><output id="window-out">30 days</output></span>
+        </label>
+        <button class="primary small" id="apply-policy">Apply rules now</button>
+        <p class="note" id="policy-note" role="status"></p>
+      </section>
+    </aside>
+
+    <!-- Middle: chat -->
+    <section class="chat panel" aria-labelledby="chat-title">
+      <div class="chat-head">
+        <h2 id="chat-title">Chat as a customer</h2>
+        <div class="who" role="radiogroup" aria-label="Customer" id="who"></div>
+      </div>
+      <details class="orders" id="orders">
+        <summary>Orders on <span id="orders-owner">this</span> account</summary>
+        <ul id="order-list"></ul>
+      </details>
+      <div class="log" id="log" aria-live="polite"></div>
+      <div class="suggest" id="suggest"></div>
+      <form class="composer" id="composer">
+        <label class="sr-only" for="input">Message</label>
+        <input id="input" autocomplete="off" maxlength="1200" placeholder="Ask about an order, for example: where is ORD-1003?">
+        <button class="primary" id="send" type="submit">Send</button>
+      </form>
+    </section>
+
+    <!-- Right: live trace -->
+    <section class="waybill panel" aria-labelledby="trace-title">
+      <div class="waybill-head">
+        <h2 id="trace-title">Tracking timeline</h2>
+        <p class="waybill-sub" id="trace-id">Send a message to watch it move through the agents.</p>
+      </div>
+      <div class="stamp-slot"><div class="stamp" id="stamp" hidden></div></div>
+      <ol class="scans" id="scans"></ol>
+      <dl class="meter" id="meter" hidden>
+        <div><dt>Time</dt><dd id="m-time">-</dd></div>
+        <div><dt>AI calls</dt><dd id="m-calls">-</dd></div>
+        <div><dt>AI cost</dt><dd id="m-cost">-</dd></div>
+        <div><dt>Mode</dt><dd id="m-mode">-</dd></div>
+      </dl>
+    </section>
+  </div>
+</section>
+
+<!-- ============================== APPROVALS ============================== -->
+<section class="view" id="view-approvals" aria-labelledby="appr-title">
+  <div class="page">
+    <h1 id="appr-title">Support lead queue</h1>
+    <p class="lede">The agents never pay a large refund or claim on their own. When one is above the approval limit, the execution agent opens a ticket and parks it here.
+      A person reviews it and decides. Only after an approval does the system pay, and the payment records who approved it.</p>
+    <label class="field inline"><span>Reviewing as</span><input id="approver" value="Dana, support lead" maxlength="40"></label>
+    <div id="approval-list" class="queue"></div>
+  </div>
+</section>
+
+<!-- ============================== HOW IT WORKS ============================== -->
+<section class="view" id="view-how" aria-labelledby="how-title">
+  <div class="page">
+    <h1 id="how-title">How it works</h1>
+    <p class="lede">Support teams at delivery companies spend most of their day on three questions: where is my refund, where is my parcel, and can I claim for a damaged item.
+      Each one needs several systems and a policy check. This project automates them safely, and proves it with automated tests.</p>
+
+    <h2>The route every message takes</h2>
+    <ol class="line" id="line">
+      <li><b>Safety check</b><span>Blocks attempts to trick the system, like "ignore your instructions", before any AI reads them.</span><em class="kind code">Code</em></li>
+      <li><b>Intent agent</b><span>Works out what the customer wants and which order they mean, using earlier messages when needed.</span><em class="kind ai">AI + rules</em></li>
+      <li><b>Router</b><span>Sends the request down the refund, tracking, insurance or general-help route.</span><em class="kind code">Code</em></li>
+      <li><b>Lookup agent</b><span>Fetches order, delivery, return and refund records. It can read, never change anything, and only for this customer.</span><em class="kind ai">AI + checks</em></li>
+      <li><b>Policy agent</b><span>Applies the company rules and gives a yes or no with the rule number. Plain code, so the same facts always get the same answer.</span><em class="kind code">Code</em></li>
+      <li><b>Execution agent</b><span>The only agent allowed to pay, file a claim or open a ticket. Above the limit, it asks a person instead.</span><em class="kind code">Code</em></li>
+      <li><b>Response agent</b><span>Writes the reply with references to the records and rules it used, then a final check stops anything false or off-limits.</span><em class="kind ai">AI + checks</em></li>
+    </ol>
+
+    <div class="two">
+      <section>
+        <h2>Why the money decisions aren't made by AI</h2>
+        <p>Language models are excellent at understanding messy messages and writing clear replies, so that's where this system uses Claude.
+          Deciding whether a refund is allowed is different: it has to be exact, repeatable and explainable to an auditor. So the rules are ordinary code,
+          and the AI has no way to call the payment tools. Even if someone tricked the AI, it couldn't move money.</p>
+      </section>
+      <section>
+        <h2>What it remembers</h2>
+        <p>Each conversation keeps a short history plus a few working facts, like which order is being discussed. That's why
+          "It arrived smashed, can I claim?" works without an order number, and why asking "any update?" after an approval gets the right answer.</p>
+      </section>
+    </div>
+
+    <h2>Safety controls, and how each is proven</h2>
+    <table class="grid">
+      <thead><tr><th scope="col">Risk</th><th scope="col">Control</th><th scope="col">Proven by</th></tr></thead>
+      <tbody>
+        <tr><td>Someone tries to override the instructions</td><td>Message is blocked before any AI sees it</td><td>6 attack tests</td></tr>
+        <tr><td>A customer asks about someone else's order</td><td>Every lookup checks the order belongs to them, and the reply doesn't confirm it exists</td><td>Ownership tests</td></tr>
+        <tr><td>A large refund is paid automatically</td><td>Above the limit, a person must approve, and the payment records who approved it</td><td>Approval tests</td></tr>
+        <tr><td>A customer lies about the return reason</td><td>The warehouse record decides, not the customer's claim</td><td>Social-engineering test</td></tr>
+        <tr><td>The AI invents an order number or a fact</td><td>Order numbers must appear in the message, and the reply may only cite real records</td><td>Hallucination tests</td></tr>
+        <tr><td>The same refund is paid twice</td><td>Each order can be refunded once</td><td>Duplicate-payment test</td></tr>
+        <tr><td>The AI service goes down</td><td>The system falls back to rules and still gives the correct outcome</td><td>Outage test</td></tr>
+        <tr><td>Personal data ends up in logs</td><td>Emails, card and phone numbers are masked before logging</td><td>Redaction test</td></tr>
+      </tbody>
+    </table>
+
+    <div class="two">
+      <section>
+        <h2>Every request leaves a trail</h2>
+        <p>The tracking timeline you watched in the demo is the real operational record. Each request gets a trace with every step, every record lookup,
+          every AI call with its token cost, and the final decision. Every action is also written to an audit log with the reason it was taken.
+          Those logs drive the alerts an on-call engineer would get at 2 AM, such as a rising error rate or an unusual number of refunds.</p>
+      </section>
+      <section>
+        <h2>What it's built with</h2>
+        <ul class="plain">
+          <li>Claude Haiku 5.5 from Anthropic, chosen because these are short understanding and writing tasks where a larger model adds cost, not accuracy</li>
+          <li>Python, with the Anthropic SDK and no agent framework, so every permission is explicit</li>
+          <li>FastAPI and live streaming for this website</li>
+          <li>Docker for packaging, and automated tests on every change</li>
+        </ul>
+      </section>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== RESULTS ============================== -->
+<section class="view" id="view-results" aria-labelledby="res-title">
+  <div class="page">
+    <h1 id="res-title">Test results</h1>
+    <p class="lede">The system is checked against a fixed set of customer requests with known correct outcomes, including deliberate attacks and mistakes.
+      A change is only accepted if these tests still pass.</p>
+    <div class="scorecards" id="scorecards"></div>
+    <p class="note" id="honest-note"></p>
+
+    <div class="runbar">
+      <div>
+        <h2>Run the test suite now</h2>
+        <p>Runs all 34 main test cases live on this server in rules-only mode. It's free and takes under a second.</p>
+      </div>
+      <button class="primary" id="run-bench">Run 34 tests</button>
+    </div>
+    <div id="bench-out"></div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <p>Capstone 1: Production Multi-Agent System. Built by <span class="author-name">Umashanker</span> for the AI Agentic Engineering and Forward Deployed Engineering program.</p>
+  <p>SwiftParcel and its customers are fictional. Every visitor gets a private sandbox, so nothing you do here affects anyone else.</p>
+</footer>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

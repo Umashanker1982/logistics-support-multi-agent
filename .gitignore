@@ -1,0 +1,11 @@
+.env
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+# runtime state (recreated on demand)
+ops/logs/
+ops/state/
+memory/sessions/
+security/approvals/

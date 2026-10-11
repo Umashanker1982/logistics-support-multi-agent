@@ -1,0 +1,66 @@
+{
+  "_comment": "Simulated backends for SwiftParcel Logistics. 'as_of' is a fixed simulated clock so results are reproducible.",
+  "as_of": "2026-10-08",
+  "customers": {
+    "C-100": {"name": "Alice Rivera", "email": "alice@example.com", "tier": "standard"},
+    "C-200": {"name": "Ben Okafor", "email": "ben@example.com", "tier": "business"},
+    "C-300": {"name": "Chen Wei", "email": "chen@example.com", "tier": "standard"}
+  },
+  "orders": {
+    "ORD-1001": {"customer_id": "C-100", "status": "delivered", "delivered_on": "2026-09-20",
+                 "items": [{"sku": "HP-220", "name": "Wireless Headphones", "price": 120.00}],
+                 "insurance": null},
+    "ORD-1002": {"customer_id": "C-100", "status": "returned", "delivered_on": "2026-09-10",
+                 "items": [{"sku": "KB-310", "name": "Mechanical Keyboard", "price": 45.00}],
+                 "insurance": null},
+    "ORD-1003": {"customer_id": "C-100", "status": "in_transit", "delivered_on": null,
+                 "items": [{"sku": "LMP-12", "name": "Desk Lamp", "price": 35.00}],
+                 "insurance": {"coverage_limit": 100.00}},
+    "ORD-1004": {"customer_id": "C-200", "status": "returned", "delivered_on": "2026-09-18",
+                 "items": [{"sku": "MON-27", "name": "27-inch Monitor", "price": 350.00}],
+                 "insurance": null},
+    "ORD-1005": {"customer_id": "C-200", "status": "returned", "delivered_on": "2026-09-22",
+                 "items": [{"sku": "CHR-01", "name": "Office Chair Cushion", "price": 60.00}],
+                 "insurance": null},
+    "ORD-1006": {"customer_id": "C-200", "status": "delivered", "delivered_on": "2026-08-15",
+                 "items": [{"sku": "BAG-07", "name": "Laptop Bag", "price": 80.00}],
+                 "insurance": null},
+    "ORD-1007": {"customer_id": "C-300", "status": "delivered", "delivered_on": "2026-10-02",
+                 "items": [{"sku": "VAS-02", "name": "Ceramic Vase", "price": 180.00}],
+                 "insurance": {"coverage_limit": 500.00}},
+    "ORD-1008": {"customer_id": "C-300", "status": "exception", "delivered_on": null,
+                 "items": [{"sku": "SPK-90", "name": "Bluetooth Speaker", "price": 95.00}],
+                 "insurance": null},
+    "ORD-1009": {"customer_id": "C-300", "status": "delivered", "delivered_on": "2026-09-28",
+                 "items": [{"sku": "TV-55", "name": "55-inch TV", "price": 900.00}],
+                 "insurance": {"coverage_limit": 1000.00}},
+    "ORD-1010": {"customer_id": "C-100", "status": "returned", "delivered_on": "2026-09-05",
+                 "items": [{"sku": "CAB-03", "name": "USB-C Cable Pack", "price": 30.00}],
+                 "insurance": null},
+    "ORD-1011": {"customer_id": "C-300", "status": "delivered", "delivered_on": "2026-06-01",
+                 "items": [{"sku": "MUG-11", "name": "Travel Mug Set", "price": 40.00}],
+                 "insurance": {"coverage_limit": 100.00}},
+    "ORD-1012": {"customer_id": "C-200", "status": "returned", "delivered_on": "2026-08-01",
+                 "items": [{"sku": "HUB-04", "name": "USB Hub", "price": 25.00}],
+                 "insurance": null}
+  },
+  "shipments": {
+    "ORD-1001": {"carrier": "UPS", "tracking_no": "1Z999AA10001", "status": "delivered", "last_scan": "2026-09-20 Austin, TX", "eta": null},
+    "ORD-1003": {"carrier": "FedEx", "tracking_no": "7712 3456 0003", "status": "in_transit", "last_scan": "2026-10-07 Memphis, TN hub", "eta": "2026-10-10"},
+    "ORD-1007": {"carrier": "UPS", "tracking_no": "1Z999AA10007", "status": "delivered", "last_scan": "2026-10-02 Seattle, WA", "eta": null},
+    "ORD-1008": {"carrier": "USPS", "tracking_no": "9400 1000 0008", "status": "exception", "last_scan": "2026-09-25 Denver, CO - package not found at facility", "eta": null},
+    "ORD-1009": {"carrier": "FedEx", "tracking_no": "7712 3456 0009", "status": "delivered", "last_scan": "2026-09-28 Portland, OR", "eta": null}
+  },
+  "returns": {
+    "ORD-1002": {"received_on": "2026-09-24", "reason": "defective"},
+    "ORD-1004": {"received_on": "2026-09-30", "reason": "defective"},
+    "ORD-1005": {"received_on": "2026-10-01", "reason": "change_of_mind"},
+    "ORD-1010": {"received_on": "2026-09-15", "reason": "wrong_item"},
+    "ORD-1012": {"received_on": "2026-08-20", "reason": "defective"}
+  },
+  "refunds": {
+    "ORD-1010": {"refund_id": "RF-5001", "amount": 30.00, "issued_on": "2026-09-18", "status": "issued"}
+  },
+  "claims": {},
+  "tickets": {}
+}

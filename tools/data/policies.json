@@ -1,0 +1,24 @@
+{
+  "_comment": "Business rules the Policy agent enforces. IDs are cited in customer replies and audit logs.",
+  "rules": {
+    "R-1": "A cash refund requires the item to have been returned and received at our warehouse.",
+    "R-2": "Refunds must be requested within the refund window (30 days by default) after the return is received.",
+    "R-3": "Change-of-mind returns are refunded as store credit, not as a cash refund.",
+    "R-4": "Refunds above the approval limit require approval by a human support lead before payment.",
+    "R-5": "Each order can be refunded at most once.",
+    "I-1": "Insurance claims require active shipping insurance on the order.",
+    "I-2": "A claim payout is capped at the lower of the item value and the coverage limit.",
+    "I-3": "Insurance claims must be filed within 60 days of delivery.",
+    "I-4": "Claim payouts above the approval limit require approval by a human claims lead.",
+    "I-5": "A claim can be filed once the parcel is delivered or declared lost, not while it is still in transit.",
+    "T-1": "A shipment flagged as an exception (lost or stuck) automatically opens an investigation ticket.",
+    "S-1": "Customers can only access and act on orders that belong to their own account."
+  },
+  "faq": {
+    "hours": "Support is available Monday to Friday, 8am to 8pm Eastern, and Saturday 9am to 5pm.",
+    "contact": "You can reach a human agent by replying 'agent' in this chat or emailing support@swiftparcel.example.",
+    "refund_time": "Approved refunds reach the original payment method within 5 to 7 business days.",
+    "return_how": "Start a return from Orders > Return Item in your account, print the label, and drop the parcel at any carrier location.",
+    "insurance_what": "Shipping insurance covers loss or damage in transit up to the coverage limit shown on your order."
+  }
+}

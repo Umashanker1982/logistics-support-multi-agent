@@ -1,0 +1,42 @@
+# Local / single-host deployment.
+#   docker compose up --build            web demo on http://localhost:8000
+#   docker compose run --rm cli demo     scripted CLI walkthrough
+#   docker compose run --rm cli approvals list
+#   docker compose --profile eval run --rm benchmark
+x-hardening: &hardening
+  env_file:
+    - path: .env
+      required: false        # offline mode works with no .env at all
+  read_only: true            # app writes only to /data and /tmp
+  tmpfs: [/tmp]
+  security_opt: ["no-new-privileges:true"]
+
+services:
+  web:
+    <<: *hardening
+    build: .
+    image: swiftparcel-support:latest
+    ports: ["8000:8000"]
+    volumes: [support-data:/data]
+    deploy:
+      resources:
+        limits: {cpus: "0.50", memory: 384M}
+
+  cli:
+    <<: *hardening
+    image: swiftparcel-support:latest
+    entrypoint: ["python", "main.py"]
+    command: ["demo"]
+    volumes: [support-data:/data]
+    stdin_open: true
+    tty: true
+    profiles: ["cli"]
+
+  benchmark:
+    <<: *hardening
+    image: swiftparcel-support:latest
+    entrypoint: ["python", "-m", "eval.benchmark", "--min-pass", "0.95", "--out", "/tmp/results"]
+    profiles: ["eval"]
+
+volumes:
+  support-data:

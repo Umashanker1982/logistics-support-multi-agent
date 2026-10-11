@@ -1,0 +1,52 @@
+digraph G {
+  rankdir=LR; bgcolor="white"; pad=0.3; nodesep=0.35; ranksep=0.55;
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, color="#4a5568", fillcolor="#f7fafc"];
+  edge [fontname="Helvetica", fontsize=9, color="#4a5568"];
+
+  customer [label="Customer\n(CLI / chat UI)", shape=oval, fillcolor="#e6fffa"];
+  human [label="Support lead\n(approvals console)", shape=oval, fillcolor="#fffaf0"];
+
+  subgraph cluster_orch { label="Orchestration"; style="rounded,dashed"; color="#a0aec0"; fontname="Helvetica";
+    guard_in [label="Input guardrail\nlength, injection,\ncontrol chars", fillcolor="#fff5f5"];
+    orch [label="Orchestrator\n(supervisor)", fillcolor="#ebf8ff", penwidth=2];
+    router [label="Router\nintent → workflow\n(deterministic table)"];
+    guard_out [label="Output guardrail\ncitations, foreign ids,\nfalse money claims", fillcolor="#fff5f5"];
+  }
+
+  subgraph cluster_agents { label="Specialist agents"; style="rounded,dashed"; color="#a0aec0"; fontname="Helvetica";
+    intent [label="Intent agent\nClaude Haiku | rules"];
+    lookup [label="Lookup agent\nClaude tool-use | plan\n(read-only tools)"];
+    policy [label="Policy agent\ndeterministic rules\nR-1..R-5, I-1..I-5, T-1"];
+    exec [label="Execution agent\nonly writer\n(refund, claim, ticket)"];
+    resp [label="Response agent\nClaude Haiku | templates"];
+    general [label="General agent\nFAQ only"];
+  }
+
+  subgraph cluster_tools { label="Tool layer"; style="rounded,dashed"; color="#a0aec0"; fontname="Helvetica";
+    registry [label="Tool registry\npermissions · ownership\naudit reason · errors", fillcolor="#fff5f5", penwidth=2];
+    backends [label="Simulated backends\norders · shipments · returns\nrefunds · claims · tickets", shape=cylinder, fillcolor="#f0fff4"];
+  }
+
+  subgraph cluster_state { label="State & observability"; style="rounded,dashed"; color="#a0aec0"; fontname="Helvetica";
+    memory [label="Session memory\nhistory + working facts\n(JSON per session)", shape=cylinder];
+    approvals [label="Approval queue\n(human in the loop)", shape=cylinder, fillcolor="#fffaf0"];
+    traces [label="Traces + audit log\n(JSON lines)", shape=cylinder];
+  }
+
+  customer -> guard_in -> orch;
+  orch -> intent [label="1"];
+  orch -> router [label="2"];
+  orch -> lookup [label="3"];
+  orch -> policy [label="4"];
+  orch -> exec [label="5"];
+  orch -> resp [label="6"];
+  orch -> general [style=dashed, label="general"];
+  resp -> guard_out -> customer [label="reply + citations"];
+  lookup -> registry; policy -> registry; exec -> registry;
+  registry -> backends;
+  exec -> approvals [label="> $200"];
+  human -> approvals [label="approve / reject"];
+  orch -> memory [dir=both];
+  registry -> traces [style=dotted];
+  orch -> traces [style=dotted];
+}
